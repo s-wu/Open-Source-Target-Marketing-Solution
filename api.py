@@ -37,7 +37,7 @@ def get_scores(demographics):
     result = []
     for latitude, longitude in zip(latitudes.ravel(), longitudes.ravel()):
         f = predict.get_features(latitude, longitude)
-        score = current_regression.predict(f.reshape((1, -1)))
+        score = current_regression.predict(f.reshape((1, -1))).asscalar()
         result.append({'longitude': longitude, 'latitude': latitude, 'score': score})
     return result
 
