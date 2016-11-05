@@ -25,7 +25,7 @@ def get_businesses(latitude, longitude, categories, radius=5000, mesh_size=1):
     mesh_dist = float(radius) / mesh_size
 
     params = {
-            'limit': 20,
+            'limit': 5,
             'offset': 0,
             'sort': 0,
             'category_filter': ','.join(categories),

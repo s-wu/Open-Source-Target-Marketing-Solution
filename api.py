@@ -22,7 +22,6 @@ def set_address(address, categories):
     current_categories = categories
     
     current_businesses = yelp_fetcher.get_businesses(current_latitude, current_longitude, categories)
-    print current_businesses
 
     current_regression = predict.get_regression(current_businesses)
 
@@ -31,7 +30,16 @@ def get_current_businesses():
     return current_businesses
 
 def get_scores(demographics):
-    return []
+    latitudes, longitudes = np.meshgrid(
+            np.linspace(current_latitude - 1e-2, current_latitude + 1e-2, 5),
+            np.linspace(current_longitude - 1e-2, current_longitude + 1e-2, 5),
+            )
+    result = []
+    for latitude, longitude in zip(latitudes.ravel(), longitudes.ravel()):
+        f = predict.get_features(latitude, longitude)
+        score = current_regression.predict(f.reshape((1, -1)))
+        result.append({'longitude': longitude, 'latitude': latitude, 'score': score})
+    return result
 
 if __name__ == '__main__':
     set_address('410 Memorial Drive, Cambridge, MA 02139', ['sushi'])
