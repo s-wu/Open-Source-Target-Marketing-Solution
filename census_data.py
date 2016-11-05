@@ -50,5 +50,5 @@ def getTractDemographics(x, y):
         demographics_cache[demographics_cache_key] = res
         return res
 
-print getTractDemographics(-76,41)
-
+if __name__ == '__main__':
+    print getTractDemographics(-76,41)

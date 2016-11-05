@@ -11,7 +11,7 @@ Params:
     categories - list of Yelp's: https://www.yelp.com/developers/documentation/v2/all_category_list
     radius  - in meters
 '''
-def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=5):
+def get_businesses(latitude, longitude, categories, radius=5000, mesh_size=1):
     # read API keys
     with io.open('secrets/yelp_secret.json') as cred:
         creds = json.load(cred)
@@ -37,17 +37,15 @@ def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=5):
     for i in range(-mesh_size / 2, mesh_size / 2 + 1):
         for j in range(-mesh_size / 2, mesh_size / 2 + 1):
             try:
-                print latitude + i * mesh_dist * meters_to_latitude
-                print longitude + j * mesh_dist * meters_to_longitude
                 response = client.search_by_coordinates(
                         latitude + i * mesh_dist * meters_to_latitude,
                         longitude + j * mesh_dist * meters_to_longitude,
                         **params)
                 for business in response.businesses:
                     businesses[business.id] = business
-                    print business.name
             except Exception as e:
-                print e.message
+                pass
+                #print e.message
     return [
             {
                 'name': b.name,
