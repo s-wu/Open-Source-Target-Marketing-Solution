@@ -11,7 +11,7 @@ Params:
     categories - list of Yelp's: https://www.yelp.com/developers/documentation/v2/all_category_list
     radius  - in meters
 '''
-def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=3):
+def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=5):
     # read API keys
     with io.open('secrets/yelp_secret.json') as cred:
         creds = json.load(cred)
@@ -27,15 +27,15 @@ def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=3):
     params = {
             'limit': 20,
             'offset': 0,
-            'sort': 1,
+            'sort': 0,
             'category_filter': ','.join(categories),
             'radius_filter': mesh_dist,
             }
 
     meters_to_latitude = 1. / (111000)
     meters_to_longitude = 1. / (111321 * math.cos(math.radians(latitude)))
-    for i in range(-mesh_size / 2, mesh_size / 2):
-        for j in range(-mesh_size / 2, mesh_size / 2):
+    for i in range(-mesh_size / 2, mesh_size / 2 + 1):
+        for j in range(-mesh_size / 2, mesh_size / 2 + 1):
             try:
                 print latitude + i * mesh_dist * meters_to_latitude
                 print longitude + j * mesh_dist * meters_to_longitude
@@ -55,6 +55,7 @@ def get_businesses(latitude, longitude, categories, radius=50000, mesh_size=3):
                 'rating': b.rating,
                 'latitude': b.location.coordinate.latitude,
                 'longitude': b.location.coordinate.longitude,
+                'score': b.review_count,
             }
             for b in businesses.values()
             ]

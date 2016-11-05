@@ -26,6 +26,8 @@ for key in demo_ranges:
 
 fields = np.hstack(demo_vars.values()).tolist()
 
+demographics_cache = {}
+
 def getTractDemographics(x, y):
     result = cg.coordinates(x=x, y=y)[0]['Census Tracts'][0]
 
@@ -33,15 +35,20 @@ def getTractDemographics(x, y):
     county_fips = int(result['COUNTY'])
     tract = int(result['TRACT'])
 
-    data = census.acs5.state_county_tract(fields, state_fips, county_fips, tract)[0]
-    res = {}
+    demographics_cache_key = (state_fips, county_fips, tract)
+    if demographics_cache_key in demographics_cache:
+        return demographics_cache[demographics_cache_key]
+    else:
+        data = census.acs5.state_county_tract(fields, state_fips, county_fips, tract)[0]
+        res = {}
 
-    for key in demo_vars:
-        res[key] = 0
-        for var in demo_vars[key]:
-            res[key] += int(data[var])
+        for key in demo_vars:
+            res[key] = 0
+            for var in demo_vars[key]:
+                res[key] += int(data[var])
 
-    return res
+        demographics_cache[demographics_cache_key] = res
+        return res
 
 print getTractDemographics(-76,41)
 

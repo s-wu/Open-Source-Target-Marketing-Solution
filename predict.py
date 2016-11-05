@@ -4,21 +4,17 @@ from sklearn.linear_model import LinearRegression
 import yelp_fetcher
 import census_data
 
-LOCATION = (39.7390720,-75.5397880)
-
-def get_features(x, y):
-    demographics = census_data.getTractDemographics(x, y)
+def get_features(latitude, longitude):
+    demographics = census_data.getTractDemographics(x=longitude, y=latitude)
     return np.array([ v for k, v in sorted(demographics.items()) ])
 
-def predict(latitude, longitude, categories):
-    businesses = yelp_fetcher.get_businesses(latitude, longitude, categories)
-    print businesses
+def get_regression(businesses, categories):
 
     features = []
     target = []
     for b in businesses:
-        y, x = b['latitude'], b['longitude']
-        features.append(get_features(x, y))
+        latitude, longitude = b['latitude'], b['longitude']
+        features.append(get_features(latitude, longitude))
         target.append(b['review_count'])
     features = np.vstack(features)
     target = np.array(target)
@@ -30,4 +26,8 @@ def predict(latitude, longitude, categories):
     return reg
 
 if __name__ == '__main__':
-    predict(LOCATION[0], LOCATION[1], ['sushi'])
+    WIL = (39.7390720,-75.5397880)
+    businesses = yelp_fetcher.get_businesses(WIL[0], WIL[1], categories)
+    print businesses
+
+    print get_regression(businesses, ['food'])
