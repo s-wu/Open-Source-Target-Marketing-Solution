@@ -34,8 +34,8 @@ def get_businesses(latitude, longitude, categories, radius=5000, mesh_size=1):
 
     meters_to_latitude = 1. / (111000)
     meters_to_longitude = 1. / (111321 * math.cos(math.radians(latitude)))
-    for i in range(-mesh_size / 2, mesh_size / 2 + 1):
-        for j in range(-mesh_size / 2, mesh_size / 2 + 1):
+    for i in range(-(mesh_size / 2), mesh_size / 2 + 1):
+        for j in range(-(mesh_size / 2), mesh_size / 2 + 1):
             try:
                 response = client.search_by_coordinates(
                         latitude + i * mesh_dist * meters_to_latitude,
