@@ -2,6 +2,8 @@
 import json
 import sys
 
+import api
+
 def cnt(s):
     return len(s)
 
@@ -9,14 +11,16 @@ def cnt(s):
 def set_address(params):
     address = params["address"]
     dest = params["dest"]
+    return api.set_address(params, dest)
 
 #
 def get_businesses(params):
-    pass
+    return api.get_businesses()
 
 #dict[str,int]
 def get_scores(params):
     d = params["dict"]
+    return api.get_scores(d)
 
 #print "sup"
 
