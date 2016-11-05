@@ -11,16 +11,28 @@ def cnt(s):
 def set_address(params):
     address = params["address"]
     dest = params["dest"]
-    return api.set_address(params, dest)
+    try:
+        return api.set_address(address, dest)
+    except Exception as e:
+        sys.stderr.write(e.message)
+        return None
 
 #
 def get_businesses(params):
-    return api.get_businesses()
+    try:
+        return api.get_current_businesses()
+    except Exception as e:
+        sys.stderr.write(e.message)
+        return None
 
 #dict[str,int]
 def get_scores(params):
     d = params["dict"]
-    return api.get_scores(d)
+    try:
+        return api.get_scores(d)
+    except Exception as e:
+        sys.stderr.write(e.message)
+        return None
 
 #print "sup"
 

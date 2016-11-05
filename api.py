@@ -1,5 +1,6 @@
 from censusgeocode import *
 import numpy as np
+import sys
 
 import yelp_fetcher
 import predict
@@ -16,6 +17,7 @@ def set_address(address, categories):
     global current_latitude, current_longitude, current_categories, current_businesses, current_regression
     cg = CensusGeocode()
     res = cg.onelineaddress(address)
+    sys.stderr.write(str(address))
     current_latitude = res[0]['coordinates']['y']
     current_longitude = res[0]['coordinates']['x']
 
